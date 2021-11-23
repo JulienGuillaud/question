@@ -11,52 +11,52 @@ import javax.persistence.Id;
 @Entity
 public class User {
 
-	@GeneratedValue
-	@Id
-	private long id;
-	private String login;
-	private String lastName;
+  @GeneratedValue
+  @Id
+  private long id;
+  private String login;
+  private String lastName;
 
-	/**
-	 * @return the id
-	 */
-	public long getId() {
-		return id;
-	}
+  /**
+   * @return the id
+   */
+  public long getId() {
+    return id;
+  }
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(long id) {
-		this.id = id;
-	}
+  /**
+   * @param unId the id to set
+   */
+  public void setId(final long unId) {
+    this.id = id;
+  }
 
-	/**
-	 * @return the login
-	 */
-	public String getLogin() {
-		return login;
-	}
+  /**
+   * @return the login
+   */
+  public String getLogin() {
+    return login;
+  }
 
-	/**
-	 * @param login the login to set
-	 */
-	public void setLogin(String login) {
-		this.login = login;
-	}
+  /**
+   * @param unLogin the login to set
+   */
+  public void setLogin(final String unLogin) {
+    this.login = unLogin;
+  }
 
-	/**
-	 * @return the lastName
-	 */
-	public String getLastName() {
-		return lastName;
-	}
+  /**
+   * @return the lastName
+   */
+  public String getLastName() {
+    return lastName;
+  }
 
-	/**
-	 * @param lastName the lastName to set
-	 */
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+  /**
+   * @param unLastName the lastName to set
+   */
+  public void setLastName(final String unLastName) {
+    this.lastName = unLastName;
+  }
 
 }

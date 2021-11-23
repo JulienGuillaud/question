@@ -10,6 +10,6 @@ import fr.gamedev.question.data.Answer;
  *
  */
 @RepositoryRestResource(collectionResourceRel = "answer", path = "answer")
-public interface AnswerRepository extends PagingAndSortingRepository<Answer, Long>{
+public interface AnswerRepository extends PagingAndSortingRepository<Answer, Long> {
 
 }
