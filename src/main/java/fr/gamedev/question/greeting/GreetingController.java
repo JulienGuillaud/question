@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GreetingController {
 
+    /**.
+     * counter
+     */
     private final AtomicLong counter = new AtomicLong();
 
     /**

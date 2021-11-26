@@ -6,7 +6,13 @@ package fr.gamedev.question.greeting;
  */
 public class Greeting {
 
+  /**.
+   * id long
+   */
   private final long id;
+  /**.
+   * string content
+   */
   private final String content;
 
   public Greeting(final long unId, final String unContent) {

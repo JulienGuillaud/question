@@ -3,6 +3,8 @@ package fr.gamedev.question.data;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import java.util.Set;
 
 /**
  * @author djer1
@@ -11,11 +13,25 @@ import javax.persistence.Id;
 @Entity
 public class User {
 
+  /**.
+   * id long
+   * */
   @GeneratedValue
   @Id
   private long id;
+  /**.
+   * lastname string
+   */
   private String login;
+  /**.
+   * lastname string
+   * */
   private String lastName;
+  /**.
+   * Tag tag
+   */
+  @ManyToMany
+  private Set<Tag> tags;
 
   /**
    * @return the id
@@ -57,6 +73,18 @@ public class User {
    */
   public void setLastName(final String unLastName) {
     this.lastName = unLastName;
+  }
+  /**
+   * @return Tag
+   */
+  public Set<Tag> getTags() {
+    return tags;
+  }
+  /**
+   * @param  newTags
+   */
+  public void setTags(final Set<Tag> newTags) {
+    this.tags = newTags;
   }
 
 }

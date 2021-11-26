@@ -11,12 +11,21 @@ import javax.persistence.OneToOne;
 @Entity
 public class Answer {
 
+  /**.
+   * id long
+   */
   @GeneratedValue
   @Id
   private long id;
 
+  /**.
+   * Question
+   */
   @OneToOne
   private Question question;
+  /**.
+   * correct answer Boolean
+   */
   private Boolean correctAnswer;
 
   /**
