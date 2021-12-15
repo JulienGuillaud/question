@@ -1,5 +1,7 @@
 package fr.gamedev.question.data;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -37,6 +39,16 @@ public class UserAnswer {
    */
   private String text;
 
+	/**
+	 * . int point
+	 */
+	private int points;
+
+	/**
+	 * . LocalDatetime date
+	 */
+	private LocalDateTime date;
+
   /**
    * @return the id
    */
@@ -71,6 +83,34 @@ public class UserAnswer {
   public Boolean getCorrect() {
     return correct;
   }
+
+	/**
+	 * @param newPoints to set
+	 */
+	public void setPoints(final int newPoints) {
+		this.points = newPoints;
+	}
+
+	/**
+	 * @return int Points
+	 */
+	public int getPoints() {
+		return points;
+	}
+
+	/**
+	 * @param newDate to set
+	 */
+	public void setDate(final LocalDateTime newDate) {
+		this.date = newDate;
+	}
+
+	/**
+	 * @return newDate date
+	 */
+	public LocalDateTime getDate() {
+		return date;
+	}
 
   /**
    * @param newCorrect the correct to set

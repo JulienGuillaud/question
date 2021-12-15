@@ -1,8 +1,13 @@
 package fr.gamedev.question.repository;
 
-import fr.gamedev.question.data.UserAnswer;
+import java.util.Optional;
+
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
+import fr.gamedev.question.data.Question;
+import fr.gamedev.question.data.User;
+import fr.gamedev.question.data.UserAnswer;
 
 /**
  * @author djer1
@@ -10,5 +15,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  */
 @RepositoryRestResource()
 public interface UserAnswerRepository extends PagingAndSortingRepository<UserAnswer, Long> {
+
+	Optional<UserAnswer> findFirstUserAnswerByUserAndQuestionAndCorrectOrderByDate(User user, Question question);
 
 }
