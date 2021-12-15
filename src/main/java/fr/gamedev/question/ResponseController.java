@@ -74,11 +74,13 @@ public class ResponseController {
 		return ResponseEntity.accepted().body(userAnswer);
 	}
 
-	private int getEarnedPoint(Optional<User> user, Optional<Question> question) {
-		Optional<UserAnswer> lastUserAnswer = this.userAnswerRepository.findFirstUserAnswerByUserAndQuestionAndCorrectOrderByDate(user.get(), question.get())
+	private int getEarnedPoint(final Optional<User> user, final Optional<Question> question) {
+		Optional<UserAnswer> lastUserAnswer = this.userAnswerRepository.findFirstUserAnswerByUserAndQuestionAndAndCorrectIsTrueOrderByDateDesc(user.get(), question.get());
 
 		int point = question.get().getPoint();
-		lastUserAnswer.ifPresent(userAnswer -> point = Math.floor(userAnswer.getPoints() / 2));
+		if (lastUserAnswer.isPresent()) {
+			point = (int) Math.floor(lastUserAnswer.get().getPoints() / 2.0);
+		}
 		return point;
 	}
 

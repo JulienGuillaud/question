@@ -16,6 +16,6 @@ import fr.gamedev.question.data.UserAnswer;
 @RepositoryRestResource()
 public interface UserAnswerRepository extends PagingAndSortingRepository<UserAnswer, Long> {
 
-	Optional<UserAnswer> findFirstUserAnswerByUserAndQuestionAndCorrectOrderByDate(User user, Question question);
+	Optional<UserAnswer> findFirstUserAnswerByUserAndQuestionAndAndCorrectIsTrueOrderByDateDesc(User user, Question question);
 
 }
