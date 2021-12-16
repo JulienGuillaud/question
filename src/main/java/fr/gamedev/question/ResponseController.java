@@ -24,64 +24,66 @@ import java.util.Optional;
 @RestController
 public class ResponseController {
 
-	/**
-	 * . userRepository
-	 */
-	@Autowired
-	private UserRepository userRepository;
-	/**
-	 * . questionRepository
-	 */
-	@Autowired
-	private QuestionRepository questionRepository;
-	/**
-	 * . userAnwserRepository
-	 */
-	@Autowired
-	private UserAnswerRepository userAnswerRepository;
+    /**
+     * . userRepository
+     */
+    @Autowired
+    private UserRepository userRepository;
+    /**
+     * . questionRepository
+     */
+    @Autowired
+    private QuestionRepository questionRepository;
+    /**
+     * . userAnwserRepository
+     */
+    @Autowired
+    private UserAnswerRepository userAnswerRepository;
 
-	/**
-	 * @param questionId
-	 * @param answer
-	 * @param userId
-	 * @return String
-	 */
-	@GetMapping("/response")
-	public ResponseEntity answer(@RequestParam final long questionId, @RequestParam final String answer,
-			@RequestParam final long userId) {
-		Optional<User> user = userRepository.findById(userId);
-		Optional<Question> question = questionRepository.findById(questionId);
-		if (user.isEmpty()) {
-			throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "User does not exist");
-		}
-		if (question.isEmpty()) {
-			throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Question does not exist");
-		}
-		UserAnswer userAnswer = new UserAnswer();
-		userAnswer.setUser(user.get());
-		userAnswer.setQuestion(question.get());
-		userAnswer.setText(answer);
-		userAnswer.setDate(LocalDateTime.now());
+    /**
+     * @param answer
+     * @param userId
+     * @return String
+     */
+    @GetMapping("/response")
+    public ResponseEntity answer(@RequestParam final String answer,
+                                 @RequestParam final long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "User does not exist");
+        }
+        Optional<UserAnswer> waitingForAnswer = this.userAnswerRepository.findFirstUserAnswerByUserAndCorrectIsNull(user.get());
+        if (waitingForAnswer.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "There are no waiting for response question");
+        }
 
-		if (answer.equals(question.get().getAnswer())) {
-			userAnswer.setCorrect(true);
-			userAnswer.setPoints(getEarnedPoint(user, question));
-		} else {
-			userAnswer.setCorrect(false);
-		}
-		userAnswerRepository.save(userAnswer);
+        Question question = waitingForAnswer.get().getQuestion();
 
-		return ResponseEntity.accepted().body(userAnswer);
-	}
+        UserAnswer userAnswer = new UserAnswer();
+        userAnswer.setUser(user.get());
+        userAnswer.setQuestion(question);
+        userAnswer.setText(answer);
+        userAnswer.setDate(LocalDateTime.now());
 
-	private int getEarnedPoint(final Optional<User> user, final Optional<Question> question) {
-		Optional<UserAnswer> lastUserAnswer = this.userAnswerRepository.findFirstUserAnswerByUserAndQuestionAndAndCorrectIsTrueOrderByDateDesc(user.get(), question.get());
+        if (answer.equals(question.getAnswer())) {
+            userAnswer.setCorrect(true);
+            userAnswer.setPoints(getEarnedPoint(user.get(), question));
+        } else {
+            userAnswer.setCorrect(false);
+        }
+        userAnswerRepository.save(userAnswer);
 
-		int point = question.get().getPoint();
-		if (lastUserAnswer.isPresent()) {
-			point = (int) Math.floor(lastUserAnswer.get().getPoints() / 2.0);
-		}
-		return point;
-	}
+        return ResponseEntity.accepted().body(userAnswer);
+    }
+
+    private int getEarnedPoint(final User user, final Question question) {
+        Optional<UserAnswer> lastUserAnswer = this.userAnswerRepository.findFirstUserAnswerByUserAndQuestionAndAndCorrectIsTrueOrderByDateDesc(user, question);
+
+        int point = question.getPoint();
+        if (lastUserAnswer.isPresent()) {
+            point = (int) Math.floor(lastUserAnswer.get().getPoints() / 2.0);
+        }
+        return point;
+    }
 
 }
