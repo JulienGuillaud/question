@@ -19,7 +19,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<pmdVersion>6.4.0</pmdVersion>
-		<checkstyleVersion>6.18</checkstyleVersion>
+		<!-- TODO grp2 by DJE : Maven : Je vous passe CheckStykle en 8.35 pour vous permtre d'avoir un fichier de config en 8.35 -->
+		<checkstyleVersion>8.35</checkstyleVersion>
 	</properties>
 
 
@@ -96,7 +97,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-checkstyle-plugin</artifactId>
-					<version>3.0.0</version>
+					<version>3.1.2</version>
 					<dependencies>
 						<dependency>
 							<groupId>com.puppycrawl.tools</groupId>
@@ -130,7 +131,6 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.10.0</version>
 				<configuration>
 					<linkXref>true</linkXref>
 					<targetJdk>1.8</targetJdk>
@@ -149,7 +149,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.0.0</version>
 				<configuration>
 					<configLocation>checkstyle/checkstyle_checks.xml</configLocation>
 					<suppressionsLocation>checkstyle/checkstyle-suppressions.xml</suppressionsLocation>
