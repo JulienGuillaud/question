@@ -43,12 +43,11 @@ public class User {
         return id;
     }
 
-    //FIXME grp2 by DJE : Java : Attention vous avez oublié de renomer "id" par "unId", se setter ne fait RIEN !
     /**
      * @param unId the id to set
      */
     public void setId(final long unId) {
-        this.id = id;
+        this.id = unId;
     }
 
     /**
