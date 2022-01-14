@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureMockMvc
 class QuestionControllerTest {
 
-    /**Permet de simuler le client Http sans faire de vrai appelle http.
+    /**Permet de simuler le client Http sans faire de vrai appel http.
      * MockMvc
      */
     @Autowired
@@ -59,6 +59,7 @@ class QuestionControllerTest {
      */
     @Autowired
     private QuestionRepository questionRepository;
+
     /** Permet de transfomer le json en une Objet Entity.
      * ObjectMapper
      */
@@ -130,9 +131,8 @@ class QuestionControllerTest {
                 .queryParam("answer", answer));
     }
 
-    private UserAnswer addUserAnswer(final User user) {
+    private UserAnswer addNonRespondUserAnswer(final User user, final Question question) {
         var userAnswer = new UserAnswer();
-        var question = questionRepository.findAll().iterator().next();
         userAnswer.setQuestion(question);
         userAnswer.setUser(user);
         userAnswerRepository.save(userAnswer);
@@ -171,7 +171,7 @@ class QuestionControllerTest {
 //        Given I am a user
         var user = getPolo();
 //        And A question is waiting for answer
-        var userAnswer = addUserAnswer(user);
+        var userAnswer = addNonRespondUserAnswer(user, questionRepository.findAll().iterator().next());
 //        When I ask a new question to answer
         var response = getNewQuestion(user).andReturn().getResponse();
         var returnedQuestion = getReturnedQuestionFromResponse(response);
@@ -190,13 +190,16 @@ class QuestionControllerTest {
         var returnedQuestion = getReturnedQuestionFromResponse(getNewQuestion(user)
                 .andReturn().getResponse());
 //        And i submit a valid response
-        var returnedUserAnswer = getReturnedUserAnswerFromResponse(answerQuestion(user, returnedQuestion.getAnswer())
-                .andExpect(MockMvcResultMatchers.status().isAccepted())
-                .andReturn().getResponse());
+        var returnedUserAnswer = validResponse(user, returnedQuestion);
 //        Then i recieve the correctness of the response
         Assertions.assertTrue(returnedUserAnswer.getCorrect());
 //        And i get the question's points
         Assertions.assertEquals(returnedUserAnswer.getPoints(), returnedQuestion.getPoint());
+    }
+
+    private UserAnswer validResponse(User user, Question returnedQuestion) throws Exception {
+        return getReturnedUserAnswerFromResponse(answerQuestion(user, returnedQuestion.getAnswer())
+                .andReturn().getResponse());
     }
 
     /*
@@ -212,6 +215,7 @@ class QuestionControllerTest {
         var returnedUserAnswer = getReturnedUserAnswerFromResponse(answerQuestion(user, returnedQuestion.getAnswer())
                 .andExpect(MockMvcResultMatchers.status().isAccepted())
                 .andReturn().getResponse());
+        Assertions.assertTrue(returnedUserAnswer instanceof UserAnswer);
         Assertions.assertTrue(userAnswerRepository.findById(returnedUserAnswer.getId()).isPresent());
     }
 
@@ -219,11 +223,14 @@ class QuestionControllerTest {
      * ATDD
      * */
     @Test
-    void gainedPointsDecreaseWhenTheQuestionIsAnsweredSeveralTime() {
-//        several UserAnwser is saved
-//        If i answer on response?answer="test"?userId="id"
-//        A i get a ResoponseObject
-//        The points i get are the half of the last attempt
+    void gainedPointsDecreaseWhenTheQuestionIsAnsweredSeveralTime() throws Exception {
+        var polo = getPolo();
+        var question = getReturnedQuestionFromResponse(getNewQuestion(polo)
+                .andReturn().getResponse());
+        var questionPoint = question.getPoint();
+        validResponse(polo, question);
+        var userAnswer = validResponse(polo, question);
+        Assertions.assertEquals((int) Math.floor(questionPoint / 2.0), userAnswer.getPoints());
     }
 
     /*
