@@ -1,8 +1,16 @@
 package fr.gamedev.question;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.gamedev.question.data.*;
-import fr.gamedev.question.repository.*;
+import fr.gamedev.question.data.Category;
+import fr.gamedev.question.data.Question;
+import fr.gamedev.question.data.Tag;
+import fr.gamedev.question.data.User;
+import fr.gamedev.question.data.UserAnswer;
+import fr.gamedev.question.repository.CategoryRepository;
+import fr.gamedev.question.repository.QuestionRepository;
+import fr.gamedev.question.repository.TagRepository;
+import fr.gamedev.question.repository.UserAnswerRepository;
+import fr.gamedev.question.repository.UserRepository;
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
