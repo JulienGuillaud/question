@@ -23,7 +23,7 @@ class QuestionControllerTest {
     private ObjectMapper mapper;
 
     @Test
-    void useCanGetNewQuestion() {
+    void userCanGetNewQuestion() {
 //        Given I am a user
 //        When I ask a new question to answer
 //        Then Then i get a new question
@@ -31,7 +31,7 @@ class QuestionControllerTest {
     }
 
     @Test
-    void useCannotGetNewQuestionIfNotAnswered() {
+    void userCannotGetNewQuestionIfNotAnswered() {
 //        Given I am a user
 //        When I ask a new question to answer
 //        And A question is waiting for answer
@@ -41,7 +41,7 @@ class QuestionControllerTest {
     }
 
     @Test
-    void useCanAnswerQuestion() {
+    void userCanAnswerQuestion() {
 //        Given I am a user
 //        When I ask a new question to answer
 //        And A question is waiting for answer
@@ -49,6 +49,28 @@ class QuestionControllerTest {
 //        Then i recieve the correctness of the response
 //        And i get the question's points
         Assertions.assertTrue(true);
+    }
+
+    @Test
+    void userAnswerIsCreatedOnResponse() {
+//        User get an objet of type Question when POST question/next
+//        use the question id to GET /response?answer="test"?userId="id"
+//        a UserAnwser is saved
+    }
+
+    @Test
+    void gainedPointsDecreaseWhenTheQuestionIsAnsweredSeveralTime() {
+//        several UserAnwser is saved
+//        If i answer on response?answer="test"?userId="id"
+//        A i get a ResoponseObject
+//        The points i get are the half of the last attempt
+    }
+
+    @Test
+    void nextQuestionTagIsOneOfTheUsersTags() {
+//        if user POST /question/next
+//        A question object is returned
+//        user.tags.contain(question.tag)
     }
 
 }
