@@ -1,14 +1,8 @@
 package fr.gamedev.question;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.gamedev.question.data.Category;
-import fr.gamedev.question.data.Question;
-import fr.gamedev.question.data.Tag;
-import fr.gamedev.question.data.User;
-import fr.gamedev.question.repository.CategoryRepository;
-import fr.gamedev.question.repository.QuestionRepository;
-import fr.gamedev.question.repository.TagRepository;
-import fr.gamedev.question.repository.UserRepository;
+import fr.gamedev.question.data.*;
+import fr.gamedev.question.repository.*;
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Set;
@@ -50,6 +44,12 @@ class QuestionControllerTest {
      */
     @Autowired
     private TagRepository tagRepository;
+
+    /** Handle userAnswer saving.
+     * UserAnswerRepository
+     */
+    @Autowired
+    private UserAnswerRepository userAnswerRepository;
 
     /** Handle question saving.
      * QuestionRepository
@@ -112,27 +112,48 @@ class QuestionControllerTest {
         questionRepository.save(question3);
     }
 
+    private User getPolo() {
+        return userRepository.findByLastName("Polo").stream().findFirst().get();
+    }
+
+    private ResultActions getNewQuestion(final User user) throws Exception {
+        return mockMvc.perform(get("/question/next")
+                .queryParam("userId", Long.toString(user.getId())));
+    }
+
+    private UserAnswer addUserAnswer(final User user) {
+        var userAnswer = new UserAnswer();
+        var question = questionRepository.findAll().iterator().next();
+        userAnswer.setQuestion(question);
+        userAnswer.setUser(user);
+        userAnswerRepository.save(userAnswer);
+        return userAnswer;
+    }
+
     @Test
     void userCanGetNewQuestion() throws Exception {
 //        Given I am a user
-        var user = userRepository.findByLastName("Polo").stream().findFirst();
+        var user = getPolo();
 //        When I ask a new question to answer
-        var response = mockMvc.perform(get("/question/next").queryParam("userId", Long.toString(user.get().getId())))
-                .andExpect(MockMvcResultMatchers.status().isAccepted())
-                .andReturn().getResponse();
+        var response = getNewQuestion(user)
+                .andReturn()
+                .getResponse();
 //        Then Then i get a new question
         var returnedQuestion = mapper.readValue(response.getContentAsString(), Question.class);
         Assertions.assertTrue(returnedQuestion.getContent() instanceof String);
     }
 
     @Test
-    void userCannotGetNewQuestionIfNotAnswered() {
+    void userCannotGetNewQuestionIfNotAnswered() throws Exception {
 //        Given I am a user
-//        When I ask a new question to answer
+        var user = getPolo();
 //        And A question is waiting for answer
-//        And i ask for a new question
+        var userAnswer = addUserAnswer(user);
+//        When I ask a new question to answer
+        var response = getNewQuestion(user).andReturn().getResponse();
+        var returnedQuestion = mapper.readValue(response.getContentAsString(), Question.class);
 //        Then i don't get a new question
-        Assertions.assertTrue(true);
+        Assertions.assertEquals(returnedQuestion.getId(), userAnswer.getQuestion().getId());
     }
 
     @Test
