@@ -183,14 +183,20 @@ class QuestionControllerTest {
      * BDD
      * */
     @Test
-    void userCanAnswerQuestion() {
+    void userCanAnswerQuestion() throws Exception {
 //        Given I am a user
+        var user = getPolo();
 //        When I ask a new question to answer
-//        And A question is waiting for answer
+        var returnedQuestion = getReturnedQuestionFromResponse(getNewQuestion(user)
+                .andReturn().getResponse());
 //        And i submit a valid response
+        var returnedUserAnswer = getReturnedUserAnswerFromResponse(answerQuestion(user, returnedQuestion.getAnswer())
+                .andExpect(MockMvcResultMatchers.status().isAccepted())
+                .andReturn().getResponse());
 //        Then i recieve the correctness of the response
+        Assertions.assertTrue(returnedUserAnswer.getCorrect());
 //        And i get the question's points
-        Assertions.assertTrue(true);
+        Assertions.assertEquals(returnedUserAnswer.getPoints(), returnedQuestion.getPoint());
     }
 
     /*
