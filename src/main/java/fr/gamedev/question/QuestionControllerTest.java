@@ -13,15 +13,16 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class QuestionControllerTest {
 
     /**Permet de simuler le client Http sans faire de vrai appel http.
@@ -147,6 +148,15 @@ class QuestionControllerTest {
         return mapper.readValue(response.getContentAsString(), UserAnswer.class);
     }
 
+    private UserAnswer validResponse(final User user, final Question returnedQuestion) throws Exception {
+        return getReturnedUserAnswerFromResponse(answerQuestion(user, returnedQuestion.getAnswer())
+                .andReturn().getResponse());
+    }
+
+    private boolean containAny(final Set<Tag> tags, final Set<Tag> tags1) {
+        return tags.stream().anyMatch(o -> tags1.stream().filter(tag -> tag.getId() == o.getId()).count() > 0);
+    }
+
     /*
      * BDD
      * */
@@ -197,11 +207,6 @@ class QuestionControllerTest {
         Assertions.assertEquals(returnedUserAnswer.getPoints(), returnedQuestion.getPoint());
     }
 
-    private UserAnswer validResponse(User user, Question returnedQuestion) throws Exception {
-        return getReturnedUserAnswerFromResponse(answerQuestion(user, returnedQuestion.getAnswer())
-                .andReturn().getResponse());
-    }
-
     /*
      * ATDD
      * */
@@ -237,10 +242,13 @@ class QuestionControllerTest {
      * ATDD
      * */
     @Test
-    void nextQuestionTagIsOneOfTheUsersTags() {
-//        if user POST /question/next
-//        A question object is returned
-//        user.tags.contain(question.tag)
+    void nextQuestionTagIsOneOfTheUsersTags() throws Exception {
+        var polo = getPolo();
+        var question = getReturnedQuestionFromResponse(getNewQuestion(polo)
+                .andReturn().getResponse());
+        var tags = polo.getTags();
+        var tags1 = question.getTags();
+        Assertions.assertTrue(containAny(tags, tags1));
     }
 
 }
