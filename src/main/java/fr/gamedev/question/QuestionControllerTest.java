@@ -139,6 +139,14 @@ class QuestionControllerTest {
         return userAnswer;
     }
 
+    private Question getReturnedQuestionFromResponse(final MockHttpServletResponse response) throws com.fasterxml.jackson.core.JsonProcessingException, UnsupportedEncodingException {
+        return mapper.readValue(response.getContentAsString(), Question.class);
+    }
+
+    private UserAnswer getReturnedUserAnswerFromResponse(final MockHttpServletResponse response) throws com.fasterxml.jackson.core.JsonProcessingException, UnsupportedEncodingException {
+        return mapper.readValue(response.getContentAsString(), UserAnswer.class);
+    }
+
     /*
      * BDD
      * */
@@ -169,14 +177,6 @@ class QuestionControllerTest {
         var returnedQuestion = getReturnedQuestionFromResponse(response);
 //        Then i don't get a new question
         Assertions.assertEquals(returnedQuestion.getId(), userAnswer.getQuestion().getId());
-    }
-
-    private Question getReturnedQuestionFromResponse(final MockHttpServletResponse response) throws com.fasterxml.jackson.core.JsonProcessingException, UnsupportedEncodingException {
-        return mapper.readValue(response.getContentAsString(), Question.class);
-    }
-
-    private UserAnswer getReturnedUserAnswerFromResponse(final MockHttpServletResponse response) throws com.fasterxml.jackson.core.JsonProcessingException, UnsupportedEncodingException {
-        return mapper.readValue(response.getContentAsString(), UserAnswer.class);
     }
 
     /*
