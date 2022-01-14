@@ -9,13 +9,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -121,6 +124,12 @@ class QuestionControllerTest {
                 .queryParam("userId", Long.toString(user.getId())));
     }
 
+    private ResultActions answerQuestion(final User user, final String answer) throws Exception {
+        return mockMvc.perform(get("/response")
+                .queryParam("userId", Long.toString(user.getId()))
+                .queryParam("answer", answer));
+    }
+
     private UserAnswer addUserAnswer(final User user) {
         var userAnswer = new UserAnswer();
         var question = questionRepository.findAll().iterator().next();
@@ -130,6 +139,9 @@ class QuestionControllerTest {
         return userAnswer;
     }
 
+    /*
+     * BDD
+     * */
     @Test
     void userCanGetNewQuestion() throws Exception {
 //        Given I am a user
@@ -143,6 +155,9 @@ class QuestionControllerTest {
         Assertions.assertTrue(returnedQuestion.getContent() instanceof String);
     }
 
+    /*
+     * BDD
+     * */
     @Test
     void userCannotGetNewQuestionIfNotAnswered() throws Exception {
 //        Given I am a user
@@ -151,11 +166,22 @@ class QuestionControllerTest {
         var userAnswer = addUserAnswer(user);
 //        When I ask a new question to answer
         var response = getNewQuestion(user).andReturn().getResponse();
-        var returnedQuestion = mapper.readValue(response.getContentAsString(), Question.class);
+        var returnedQuestion = getReturnedQuestionFromResponse(response);
 //        Then i don't get a new question
         Assertions.assertEquals(returnedQuestion.getId(), userAnswer.getQuestion().getId());
     }
 
+    private Question getReturnedQuestionFromResponse(final MockHttpServletResponse response) throws com.fasterxml.jackson.core.JsonProcessingException, UnsupportedEncodingException {
+        return mapper.readValue(response.getContentAsString(), Question.class);
+    }
+
+    private UserAnswer getReturnedUserAnswerFromResponse(final MockHttpServletResponse response) throws com.fasterxml.jackson.core.JsonProcessingException, UnsupportedEncodingException {
+        return mapper.readValue(response.getContentAsString(), UserAnswer.class);
+    }
+
+    /*
+     * BDD
+     * */
     @Test
     void userCanAnswerQuestion() {
 //        Given I am a user
@@ -167,13 +193,25 @@ class QuestionControllerTest {
         Assertions.assertTrue(true);
     }
 
+    /*
+     * ATDD
+     * */
     @Test
-    void userAnswerIsCreatedOnResponse() {
-//        User get an objet of type Question when POST question/next
-//        use the question id to GET /response?answer="test"?userId="id"
-//        a UserAnwser is saved
+    void userAnswerIsCreatedOnResponse() throws Exception {
+        var user = getPolo();
+        var returnedQuestion = getReturnedQuestionFromResponse(getNewQuestion(user)
+                .andExpect(MockMvcResultMatchers.status().isAccepted())
+                .andReturn().getResponse());
+        Assertions.assertTrue(returnedQuestion instanceof Question);
+        var returnedUserAnswer = getReturnedUserAnswerFromResponse(answerQuestion(user, returnedQuestion.getAnswer())
+                .andExpect(MockMvcResultMatchers.status().isAccepted())
+                .andReturn().getResponse());
+        Assertions.assertTrue(userAnswerRepository.findById(returnedUserAnswer.getId()).isPresent());
     }
 
+    /*
+     * ATDD
+     * */
     @Test
     void gainedPointsDecreaseWhenTheQuestionIsAnsweredSeveralTime() {
 //        several UserAnwser is saved
@@ -182,6 +220,9 @@ class QuestionControllerTest {
 //        The points i get are the half of the last attempt
     }
 
+    /*
+     * ATDD
+     * */
     @Test
     void nextQuestionTagIsOneOfTheUsersTags() {
 //        if user POST /question/next
