@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -111,17 +112,17 @@ class QuestionControllerTest {
         questionRepository.save(question1);
         Question question2 = new Question();
         question2.setAnswer("43");
-        question2.setContent("What is the otheruniversal answer of everything ?");
+        question2.setContent("What is the other universal answer of everything ?");
         final int point2 = 1;
         question2.setPoint(point2);
-        question2.setTags(Set.of(tag1));
+        question2.setTags(Set.of(tag1, tag2));
         questionRepository.save(question2);
         Question question3 = new Question();
         question3.setAnswer("44");
         question3.setContent("What is antoher universal answer of everything ?");
         final int point3 = 1;
         question3.setPoint(point3);
-        question3.setTags(Set.of(tag2));
+        question3.setTags(Set.of(tag1, tag3));
         questionRepository.save(question3);
     }
 
@@ -178,7 +179,11 @@ class QuestionControllerTest {
                 .getResponse();
 //        Then Then i get a new question
         var returnedQuestion = mapper.readValue(response.getContentAsString(), Question.class);
-        Assertions.assertTrue(returnedQuestion.getContent() instanceof String);
+//        TODO Assert one or the other text question
+        var possibleValue = List.of("What is antoher universal answer of everything ?",
+                "What is the other universal answer of everything ?");
+        var content = returnedQuestion.getContent();
+        Assertions.assertTrue(possibleValue.contains(content));
     }
 
     /*
