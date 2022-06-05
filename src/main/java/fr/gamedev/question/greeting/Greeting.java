@@ -6,32 +6,32 @@ package fr.gamedev.question.greeting;
  */
 public class Greeting {
 
-    /** Greeting id.*/
-    private final long id;
-    /** Greeting message.*/
-    private final String content;
+  /**.
+   * id long
+   */
+  private final long id;
+  /**.
+   * string content
+   */
+  private final String content;
 
-    /** new salutation.
-     * @param newId the ID
-     * @param newContent the content
-     */
-    public Greeting(final long newId, final String newContent) {
-        this.id = newId;
-        this.content = newContent;
-    }
+  public Greeting(final long unId, final String unContent) {
+    this.id = unId;
+    this.content = unContent;
+  }
 
-    /**
-     * @return the id
-     */
-    public long getId() {
-        return id;
-    }
+  /**
+   * @return long
+   */
+  public long getId() {
+    return id;
+  }
 
-    /**
-     * @return the content
-     */
-    public String getContent() {
-        return content;
-    }
+  /**
+   * @return String
+   */
+  public String getContent() {
+    return content;
+  }
 
 }

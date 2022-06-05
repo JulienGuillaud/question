@@ -1,12 +1,11 @@
 package fr.gamedev.question.repository;
 
+import fr.gamedev.question.data.Tag;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-import fr.gamedev.question.data.Tag;
-
 /**
- * @author djer1
+ * @author Swan
  *
  */
 @RepositoryRestResource(collectionResourceRel = "tag", path = "tag")

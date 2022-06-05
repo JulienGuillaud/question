@@ -1,35 +1,52 @@
 package fr.gamedev.question.data;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-
 /**
- * @author djer1
+ * @author Swan
  */
 @Entity
 public class UserAnswer {
 
-    /** id. */
-    @GeneratedValue(generator = "seq_gen_userAnswer")
-    @GenericGenerator(name = "seq_gen_userAnswer", strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-            parameters = { @Parameter(name = "sequence_name", value = "seq_answerUser"),
-                    @Parameter(name = "initial_value", value = "0"), @Parameter(name = "increment_size", value = "1") })
+    /**.
+     * id long
+     */
+    @GeneratedValue
     @Id
     private long id;
 
-    /** User answering providing answer. */
+    /**.
+     * Question
+     */
+    @ManyToOne
+    private Question question;
+    /**.
+     * User
+     */
     @ManyToOne
     private User user;
-    /** The correct answer (linked to the question). */
-    @ManyToOne
-    private Answer answer;
-    /** Points earn by user for this answer. */
+    /**.
+     * correct answer Boolean
+     */
+    private Boolean correct;
+    /**.
+     * Answer text String
+     */
+    private String text;
+    /**
+     * . int point
+     */
     private Integer points;
+
+    /**
+     * . LocalDatetime date
+     */
+    private LocalDateTime date;
 
     /**
      * @return the id
@@ -39,52 +56,90 @@ public class UserAnswer {
     }
 
     /**
-     * @param theId the id to set
+     * @param newId
      */
-    public void setId(final long theId) {
-        this.id = theId;
+    public void setId(final long newId) {
+        this.id = newId;
     }
 
     /**
-     * @return the user
+     * @return the question
      */
-    public User getUser() {
-        return user;
+    public Question getQuestion() {
+        return question;
     }
 
     /**
-     * @param theUser the user to set
+     * @param uneQuestion the question to set
      */
-    public void setUser(final User theUser) {
-        this.user = theUser;
+    public void setQuestion(final Question uneQuestion) {
+        this.question = uneQuestion;
     }
 
     /**
-     * @return the points
+     * @return the correct
      */
-    public Integer getPoints() {
-        return points;
+    public Boolean getCorrect() {
+        return correct;
     }
 
     /**
-     * @param newPoints the points to set
+     * @param newPoints to set
      */
     public void setPoints(final Integer newPoints) {
         this.points = newPoints;
     }
 
     /**
-     * @return the answer
+     * @return int Points
      */
-    public Answer getAnswer() {
-        return answer;
+    public Integer getPoints() {
+        return points;
     }
 
     /**
-     * @param theAnswer the answer to set
+     * @param newDate to set
      */
-    public void setAnswer(final Answer theAnswer) {
-        this.answer = theAnswer;
+    public void setDate(final LocalDateTime newDate) {
+        this.date = newDate;
+    }
+
+    /**
+     * @return newDate date
+     */
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    /**
+     * @param newCorrect the correct to set
+     */
+    public void setCorrect(final Boolean newCorrect) {
+        this.correct = newCorrect;
+    }
+    /**
+     * @return the user
+     */
+    public User getUser() {
+        return user;
+    }
+    /**
+     * @param newUser the user to set
+     */
+    public void setUser(final User newUser) {
+        this.user = newUser;
+    }
+    /**
+     * @return the text
+     */
+    public String getText() {
+        return text;
+    }
+    /**
+     * @param newText the text to set
+     */
+    public void setText(final String newText) {
+        this.text = newText;
     }
 
 }

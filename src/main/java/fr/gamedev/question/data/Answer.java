@@ -5,70 +5,69 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-
 /**
  * @author djer1
- *
  */
 @Entity
 public class Answer {
 
-    /** id.*/
-    @GeneratedValue(generator = "seq_gen_answer")
-    @GenericGenerator(name = "seq_gen_answer", strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-            parameters = { @Parameter(name = "sequence_name", value = "seq_answer"),
-                    @Parameter(name = "initial_value", value = "0"), @Parameter(name = "increment_size", value = "1") })
-    @Id
-    private long id;
+  /**.
+   * id long
+   */
+  @GeneratedValue
+  @Id
+  private long id;
 
-    /** the question this answer ... answer.*/
-    @OneToOne
-    private Question question;
-    /** the correct value for the linked question.*/
-    private Boolean correctAnswer;
+  /**.
+   * Question
+   */
+  @OneToOne
+  private Question question;
+  /**.
+   * correct answer Boolean
+   */
+  private Boolean correctAnswer;
 
-    /**
-     * @return the id
-     */
-    public long getId() {
-        return id;
-    }
+  /**
+   * @return the id
+   */
+  public long getId() {
+    return id;
+  }
 
-    /**
-     * @param theId the id to set
-     */
-    public void setId(final long theId) {
-        this.id = theId;
-    }
+  /**
+   * @param newId
+   */
+  public void setId(final long newId) {
+    this.id = newId;
+  }
 
-    /**
-     * @return the question
-     */
-    public Question getQuestion() {
-        return question;
-    }
+  /**
+   * @return the question
+   */
+  public Question getQuestion() {
+    return question;
+  }
 
-    /**
-     * @param theQuestion the question to set
-     */
-    public void setQuestion(final Question theQuestion) {
-        this.question = theQuestion;
-    }
+  /**
+   * @param uneQuestion the question to set
+   */
+  public void setQuestion(final Question uneQuestion) {
+    this.question = uneQuestion;
+  }
 
-    /**
-     * @return the correctAnswer
-     */
-    public Boolean getCorrectAnswer() {
-        return correctAnswer;
-    }
+  /**
+   * @return the correctAnswer
+   */
+  public Boolean getCorrectAnswer() {
+    return correctAnswer;
+  }
 
-    /**
-     * @param theCorrectAnswer the correctAnswer to set
-     */
-    public void setCorrectAnswer(final Boolean theCorrectAnswer) {
-        this.correctAnswer = theCorrectAnswer;
-    }
+  /**
+   * @param uneCorrectAnswer the correctAnswer to set
+   */
+  public void setCorrectAnswer(final Boolean uneCorrectAnswer) {
+    this.correctAnswer = uneCorrectAnswer;
+  }
 
 }

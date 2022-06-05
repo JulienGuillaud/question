@@ -4,26 +4,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-
 /**
- * @author djer1
- *
+ * @author Swan
  */
 @Entity
 public class Category {
-
-    /** id.*/
-    @GeneratedValue(generator = "seq_gen_category")
-    @GenericGenerator(name = "seq_gen_category", strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-            parameters = { @Parameter(name = "sequence_name", value = "seq_category"),
-                    @Parameter(name = "initial_value", value = "0"), @Parameter(name = "increment_size", value = "1") })
+    /**.
+     * id long
+     */
+    @GeneratedValue
     @Id
     private long id;
-
-    /** The category name.*/
-    private String value;
+    /**.
+     * name string
+     */
+    private String name;
 
     /**
      * @return the id
@@ -33,24 +28,21 @@ public class Category {
     }
 
     /**
-     * @param newId the id to set
+     * @param newId
      */
     public void setId(final long newId) {
         this.id = newId;
     }
-
     /**
-     * @return the value
+     * @return String
      */
-    public String getValue() {
-        return value;
+    public String getName() {
+        return name;
     }
-
     /**
-     * @param newValue the value to set
+     * @param  newName
      */
-    public void setValue(final String newValue) {
-        this.value = newValue;
+    public void setName(final String newName) {
+        this.name = newName;
     }
-
 }

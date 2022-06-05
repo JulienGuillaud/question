@@ -8,23 +8,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author djer1
- *
  */
 @RestController
 public class GreetingController {
 
-    /** message template.*/
-    private static final String TEMPLATE = "Hello, %s!";
-    /** used for IDs.*/
+    /**.
+     * counter
+     */
     private final AtomicLong counter = new AtomicLong();
 
     /**
-     * Salutation message.
-     * @param name name of user to greet.
-     * @return the custom greeting message.
+     * @param name
+     * @return Greeting
      */
     @GetMapping("/greeting")
     public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") final String name) {
-        return new Greeting(counter.incrementAndGet(), String.format(TEMPLATE, name));
+        return new Greeting(counter.incrementAndGet(), String.format("Hello, %s!", name));
     }
 }

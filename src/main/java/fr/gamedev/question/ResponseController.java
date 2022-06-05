@@ -1,16 +1,21 @@
 package fr.gamedev.question;
 
-import java.util.Optional;
-
+import fr.gamedev.question.data.Question;
+import fr.gamedev.question.data.User;
+import fr.gamedev.question.data.UserAnswer;
+import fr.gamedev.question.repository.QuestionRepository;
+import fr.gamedev.question.repository.UserAnswerRepository;
+import fr.gamedev.question.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-import fr.gamedev.question.data.Answer;
-import fr.gamedev.question.data.UserAnswer;
-import fr.gamedev.question.repository.UserAnswerRepository;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * @author djer1
@@ -19,59 +24,66 @@ import fr.gamedev.question.repository.UserAnswerRepository;
 @RestController
 public class ResponseController {
 
-    /** NB Point for a correct answer. */
-    private static final Integer POINT_FOR_CORRECT_ANSWER = 15;
-    /** NB Points for a bad answer. */
-    private static final Integer POINT_FOR_BAD_ANSWER = 0;
-
-    /** Answer provided by users (and points earned) repository. */
+    /**
+     * . userRepository
+     */
     @Autowired
-    private UserAnswerRepository userAnswerRepo;
+    private UserRepository userRepository;
+    /**
+     * . questionRepository
+     */
+    @Autowired
+    private QuestionRepository questionRepository;
+    /**
+     * . userAnwserRepository
+     */
+    @Autowired
+    private UserAnswerRepository userAnswerRepository;
 
-    /** Collect a user answer for a specific question.
-     * @param userAnswerId : the id of the question answered.
-     * @param answer the user Answer.
-     * @return Indication about correctness of the answer provided.*/
-    @PostMapping(value = "/response", produces = "application/hal+json")
-    public UserAnswer answer(@RequestParam final long userAnswerId, @RequestParam final Boolean answer) {
-
-        UserAnswer response = null;
-
-        Optional<UserAnswer> askedQuestion = userAnswerRepo.findById(userAnswerId);
-
-        Assert.isTrue(askedQuestion.isPresent(), "Réponse ignorée : la question ne vous à pas été posée !");
-        Assert.isTrue(askedQuestion.get().getPoints() == null,
-                "Réponse ignorée : vous avez déja répondu à cette question.");
-
-        Answer expectedAnswer = askedQuestion.get().getAnswer();
-
-        if (expectedAnswer.getCorrectAnswer() == answer) {
-            //Si un utilisateur a deja répondu correctement à la question,
-            // il ne gagne que 50% des points gagné précédement.
-            //S'il répond Faux, il gagne 0 points et cela n'a pas d'impacts sur les calculs futurs.
-
-            Optional<UserAnswer> lastUserAnswer = userAnswerRepo
-                    .findTopByAnswerQuestionAndUserAndPointsNotNullAndPointsIsGreaterThanOrderByPoints(
-                            askedQuestion.get().getAnswer().getQuestion(), askedQuestion.get().getUser(), 0);
-
-            Integer nbPoints = POINT_FOR_CORRECT_ANSWER;
-            if (lastUserAnswer.isPresent()) {
-                Integer lastEarnedPoints = lastUserAnswer.get().getPoints();
-                nbPoints = lastEarnedPoints / 2;
-            }
-
-            //Ajouter des points
-            askedQuestion.get().setPoints(nbPoints);
-            //response = "Bravo ! vous avez trouvé ! ";
-        } else {
-            //Ne pas ajouter de points
-            askedQuestion.get().setPoints(POINT_FOR_BAD_ANSWER);
-            //response = "Oops ! Ca n'est pas correcte";
+    /**
+     * @param answer
+     * @param userId
+     * @return String
+     */
+    @GetMapping("/response")
+    public ResponseEntity answer(@RequestParam final String answer,
+                                 @RequestParam final long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "User does not exist");
+        }
+        Optional<UserAnswer> waitingForAnswer = this.userAnswerRepository.findFirstUserAnswerByUserAndCorrectIsNull(user.get());
+        if (waitingForAnswer.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "There are no waiting for response question");
         }
 
-        response = userAnswerRepo.save(askedQuestion.get());
+        Question question = waitingForAnswer.get().getQuestion();
 
-        return response;
+        UserAnswer userAnswer = new UserAnswer();
+        userAnswer.setUser(user.get());
+        userAnswer.setQuestion(question);
+        userAnswer.setText(answer);
+        userAnswer.setDate(LocalDateTime.now());
+
+        if (answer.equals(question.getAnswer())) {
+            userAnswer.setCorrect(true);
+            userAnswer.setPoints(getEarnedPoint(user.get(), question));
+        } else {
+            userAnswer.setCorrect(false);
+        }
+        userAnswerRepository.save(userAnswer);
+
+        return ResponseEntity.accepted().body(userAnswer);
+    }
+
+    private int getEarnedPoint(final User user, final Question question) {
+        Optional<UserAnswer> lastUserAnswer = this.userAnswerRepository.findFirstUserAnswerByUserAndQuestionAndAndCorrectIsTrueOrderByDateDesc(user, question);
+
+        int point = question.getPoint();
+        if (lastUserAnswer.isPresent()) {
+            point = (int) Math.floor(lastUserAnswer.get().getPoints() / 2.0);
+        }
+        return point;
     }
 
 }
