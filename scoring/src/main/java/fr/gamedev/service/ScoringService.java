@@ -53,8 +53,12 @@ public class ScoringService {
 
         return this.userAnswerRepository
                 .findFirstUserAnswerByUserIdAndQuestionIdAndAndCorrectIsTrueOrderByDateDesc(userId, questionId)
-                .map(userAnswer -> (int) Math.floor(userAnswer.getNbPoints() / 2.0) )
+                .map(this::getPoints)
                 .orElse(scoringRulePoint);
+    }
+
+    private int getPoints(UserAnswer userAnswer) {
+        return (int) Math.floor(userAnswer.getNbPoints() / 2.0);
     }
 
     private boolean isResponseCorrect(long questionId, String userAnswer) {
