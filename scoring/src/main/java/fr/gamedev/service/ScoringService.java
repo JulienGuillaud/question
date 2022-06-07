@@ -62,7 +62,7 @@ public class ScoringService {
     }
 
     private boolean isResponseCorrect(long questionId, String userAnswer) {
-//        TODO implement me
+//        TODO implement me when Response micro service is done
         return true;
     }
 
