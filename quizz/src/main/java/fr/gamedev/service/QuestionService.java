@@ -5,6 +5,7 @@ import fr.gamedev.data.Question;
 import fr.gamedev.data.Tag;
 import fr.gamedev.dto.NextQuestionDTO;
 import fr.gamedev.dto.PendingUserAnswerDTO;
+import fr.gamedev.dto.QuestionDTO;
 import fr.gamedev.repository.QuestionRepository;
 import fr.gamedev.repository.TagRepository;
 import org.springframework.web.client.RestClientException;
@@ -105,4 +106,19 @@ public class QuestionService {
                 .map(Long::parseLong)
                 .flatMap(questionRepository::findById);
     }
+
+    public Question addQuestion(QuestionDTO questionDTO) {
+        Question question = new Question();
+        question.setContent(questionDTO.content());
+        question.setAnswer(questionDTO.answer());
+
+        questionRepository.save(question);
+
+        return question;
+    }
+
+    public Optional<Question> getQuestion(String id) {
+        return questionRepository.findById(Long.parseLong(id));
+    }
+
 }
