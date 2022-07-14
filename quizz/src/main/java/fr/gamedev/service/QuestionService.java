@@ -2,12 +2,12 @@ package fr.gamedev.service;
 
 import com.google.gson.Gson;
 import fr.gamedev.data.Question;
-import fr.gamedev.data.Tag;
+import fr.gamedev.data.Skill;
 import fr.gamedev.dto.NextQuestionDTO;
 import fr.gamedev.dto.PendingUserAnswerDTO;
 import fr.gamedev.dto.QuestionDTO;
 import fr.gamedev.repository.QuestionRepository;
-import fr.gamedev.repository.TagRepository;
+import fr.gamedev.repository.skillRepository;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -31,18 +31,18 @@ public class QuestionService {
     /**
      * . tagRepository
      */
-    private final TagRepository tagRepository;
+    private final skillRepository skillRepository;
 
 
-    public QuestionService(QuestionRepository questionRepository, TagRepository tagRepository) {
+    public QuestionService(QuestionRepository questionRepository, skillRepository skillRepository) {
         this.questionRepository = questionRepository;
-        this.tagRepository = tagRepository;
+        this.skillRepository = skillRepository;
     }
 
     public Optional<Question> nextQuestion(NextQuestionDTO nextQuestionDTO) {
         Question question = getPendingUseranswer(nextQuestionDTO)
                 .orElse(questionRepository
-                        .getRandomQuestion(collectTags(nextQuestionDTO))
+                        .getRandomQuestion(collectSkills(nextQuestionDTO))
                         .map(question1 -> createPendingUserAnswer(question1, nextQuestionDTO))
                         .orElse(null));
 
@@ -72,9 +72,9 @@ public class QuestionService {
     }
 
 
-    private Set<Tag> collectTags(NextQuestionDTO nextQuestionDTO) {
+    private Set<Skill> collectSkills(NextQuestionDTO nextQuestionDTO) {
         return Arrays.stream(nextQuestionDTO.skillIds())
-                .mapToObj(tagRepository::findById)
+                .mapToObj(skillRepository::findById)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toSet());

@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
  * @author Swan
  */
 @Entity
-public class Tag {
+public class Skill {
 
     /**.
      * id long
