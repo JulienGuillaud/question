@@ -50,4 +50,9 @@ public class QuestionController {
                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Question not found"));
     }
 
+    @GetMapping("question/{id}")
+    public ResponseEntity isResponseCorrect(@PathVariable String id, @RequestParam String response){
+        return ResponseEntity.ok(questionService.isResponseCorrect(id, response));
+    }
+
 }

@@ -121,4 +121,10 @@ public class QuestionService {
         return questionRepository.findById(Long.parseLong(id));
     }
 
+    public boolean isResponseCorrect(String id, String response) {
+        return questionRepository.findById(Long.parseLong(id))
+                .map(question -> question.getAnswer().equals(response))
+                .orElse(false);
+    }
+
 }

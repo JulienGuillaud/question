@@ -8,8 +8,15 @@ import fr.gamedev.dto.UserAnswerDTO;
 import fr.gamedev.repository.ScoringRuleRepository;
 import fr.gamedev.repository.UserAnswerRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -64,8 +71,26 @@ public class ScoringService {
     }
 
     private boolean isResponseCorrect(long questionId, String userAnswer) {
-//        TODO implement me when Response micro service is done
-        return true;
+        URI uri = UriComponentsBuilder.newInstance()
+                .scheme("http").host("localhost:8082")
+                .path("/question/" + questionId)
+                .queryParam("response", userAnswer)
+                .build()
+                .toUri();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .GET()
+                .build();
+
+        HttpResponse<String> httpResponse;
+        try {
+            httpResponse = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            throw new RestClientException(e.getMessage());
+        }
+
+        return Boolean.parseBoolean(httpResponse.body());
     }
 
     public ScoringRule upsetScoringRule(ScoringRuleDto scoringRuleDto) {
