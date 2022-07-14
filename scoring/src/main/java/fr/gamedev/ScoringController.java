@@ -2,10 +2,10 @@ package fr.gamedev;
 
 import fr.gamedev.data.ScoringRule;
 import fr.gamedev.data.UserAnswer;
+import fr.gamedev.dto.PendingUserAnswerDTO;
 import fr.gamedev.dto.ScoringRuleDto;
 import fr.gamedev.dto.UserAnswerDTO;
 import fr.gamedev.service.ScoringService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +38,12 @@ public class ScoringController {
     public ResponseEntity upsertScoringRule(@RequestBody ScoringRuleDto scoringRuleDto) {
         ScoringRule scoringRule = scoringService.upsetScoringRule(scoringRuleDto);
         return ResponseEntity.accepted().body(scoringRule);
+    }
+
+    @PostMapping("pending-user-answer")
+    public ResponseEntity pendingUserAnwser(@RequestBody PendingUserAnswerDTO pendingUserAnswerDTO) {
+        return ResponseEntity.ok()
+                .body(scoringService.pendingUserAnswer(pendingUserAnswerDTO));
     }
 
 }

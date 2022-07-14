@@ -2,6 +2,7 @@ package fr.gamedev.service;
 
 import fr.gamedev.data.ScoringRule;
 import fr.gamedev.data.UserAnswer;
+import fr.gamedev.dto.PendingUserAnswerDTO;
 import fr.gamedev.dto.ScoringRuleDto;
 import fr.gamedev.dto.UserAnswerDTO;
 import fr.gamedev.repository.ScoringRuleRepository;
@@ -73,5 +74,14 @@ public class ScoringService {
         scoringRule.setNbPoints(scoringRuleDto.nbPoint());
 
         return scoringRule;
+    }
+
+    public UserAnswer pendingUserAnswer(PendingUserAnswerDTO pendingUserAnswerDTO) {
+        UserAnswer userAnswer = new UserAnswer();
+        userAnswer.setUserId(pendingUserAnswerDTO.userId());
+        userAnswer.setQuestionId(pendingUserAnswerDTO.questionId());
+        userAnswerRepository.save(userAnswer);
+
+        return userAnswer;
     }
 }
