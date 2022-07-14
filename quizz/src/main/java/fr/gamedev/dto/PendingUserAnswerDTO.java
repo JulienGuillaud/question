@@ -6,7 +6,7 @@ public final class PendingUserAnswerDTO {
     private final long questionId;
     private final long userId;
 
-    PendingUserAnswerDTO(long questionId, long userId) {
+    public PendingUserAnswerDTO(long questionId, long userId) {
         this.questionId = questionId;
         this.userId = userId;
     }

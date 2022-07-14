@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class ScoringService {
 
@@ -83,5 +84,10 @@ public class ScoringService {
         userAnswerRepository.save(userAnswer);
 
         return userAnswer;
+    }
+
+    public Optional<Long> hasPendingUserAnswer(long userId) {
+        return userAnswerRepository.findFirstUserAnswerByUserIdAndCorrectIsNull(userId)
+                .map(UserAnswer::getQuestionId);
     }
 }
