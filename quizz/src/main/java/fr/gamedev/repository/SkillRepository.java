@@ -9,6 +9,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  *
  */
 @RepositoryRestResource(collectionResourceRel = "skill", path = "skill")
-public interface skillRepository extends PagingAndSortingRepository<Skill, Long> {
+public interface SkillRepository extends PagingAndSortingRepository<Skill, Long> {
 
 }

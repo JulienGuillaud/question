@@ -7,7 +7,7 @@ import fr.gamedev.dto.NextQuestionDTO;
 import fr.gamedev.dto.PendingUserAnswerDTO;
 import fr.gamedev.dto.QuestionDTO;
 import fr.gamedev.repository.QuestionRepository;
-import fr.gamedev.repository.skillRepository;
+import fr.gamedev.repository.SkillRepository;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -31,10 +31,10 @@ public class QuestionService {
     /**
      * . tagRepository
      */
-    private final skillRepository skillRepository;
+    private final SkillRepository skillRepository;
 
 
-    public QuestionService(QuestionRepository questionRepository, skillRepository skillRepository) {
+    public QuestionService(QuestionRepository questionRepository, SkillRepository skillRepository) {
         this.questionRepository = questionRepository;
         this.skillRepository = skillRepository;
     }
