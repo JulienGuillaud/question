@@ -1,0 +1,12 @@
+fr\gamedev\service\QuestionService.class
+fr\gamedev\QuestionController.class
+fr\gamedev\data\Category.class
+fr\gamedev\dto\PendingUserAnswerDTO.class
+fr\gamedev\data\Question.class
+fr\gamedev\dto\NextQuestionDTO.class
+fr\gamedev\repository\QuestionRepository.class
+fr\gamedev\data\Skill.class
+fr\gamedev\Launcher.class
+fr\gamedev\dto\QuestionDTO.class
+fr\gamedev\service\TagService.class
+fr\gamedev\repository\SkillRepository.class

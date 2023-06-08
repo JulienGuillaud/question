@@ -1,0 +1,11 @@
+/home/swan/esgi/question/scoring/src/main/java/fr/gamedev/dto/UserAnswerDTO.java
+/home/swan/esgi/question/scoring/src/main/java/fr/gamedev/dto/HasPendingUserAnswerDTO.java
+/home/swan/esgi/question/scoring/src/main/java/fr/gamedev/Launcher.java
+/home/swan/esgi/question/scoring/src/main/java/fr/gamedev/ScoringController.java
+/home/swan/esgi/question/scoring/src/main/java/fr/gamedev/dto/PendingUserAnswerDTO.java
+/home/swan/esgi/question/scoring/src/main/java/fr/gamedev/data/UserAnswer.java
+/home/swan/esgi/question/scoring/src/main/java/fr/gamedev/dto/ScoringRuleDto.java
+/home/swan/esgi/question/scoring/src/main/java/fr/gamedev/repository/UserAnswerRepository.java
+/home/swan/esgi/question/scoring/src/main/java/fr/gamedev/repository/ScoringRuleRepository.java
+/home/swan/esgi/question/scoring/src/main/java/fr/gamedev/data/ScoringRule.java
+/home/swan/esgi/question/scoring/src/main/java/fr/gamedev/service/ScoringService.java

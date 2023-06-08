@@ -1,0 +1,8 @@
+AuthContext\src\main\java\fr\gamedev\domain\UserSkill.class
+AuthContext\src\main\java\fr\gamedev\controller\AuthenticationController.class
+fr\gamedev\dto\UpsertDTO.class
+fr\gamedev\Launcher.class
+AuthContext\src\main\java\fr\gamedev\repository\AuthUserRepository.class
+fr\gamedev\dto\ConnectDTO.class
+AuthContext\src\main\java\fr\gamedev\service\AuthService.class
+fr\gamedev\data\AuthUser.class

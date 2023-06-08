@@ -1,0 +1,11 @@
+fr/gamedev/data/ScoringRule.class
+fr/gamedev/data/UserAnswer.class
+fr/gamedev/dto/HasPendingUserAnswerDTO.class
+fr/gamedev/dto/ScoringRuleDto.class
+fr/gamedev/repository/UserAnswerRepository.class
+fr/gamedev/Launcher.class
+fr/gamedev/dto/PendingUserAnswerDTO.class
+fr/gamedev/ScoringController.class
+fr/gamedev/dto/UserAnswerDTO.class
+fr/gamedev/service/ScoringService.class
+fr/gamedev/repository/ScoringRuleRepository.class
