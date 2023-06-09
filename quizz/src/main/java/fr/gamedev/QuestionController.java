@@ -1,6 +1,6 @@
 package fr.gamedev;
 
-import fr.gamedev.data.Question;
+import fr.gamedev.domain.Question;
 import fr.gamedev.dto.NextQuestionDTO;
 import fr.gamedev.dto.QuestionDTO;
 import fr.gamedev.service.QuestionService;

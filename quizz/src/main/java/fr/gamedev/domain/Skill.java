@@ -1,21 +1,30 @@
-package fr.gamedev.data;
+package fr.gamedev.domain;
 
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  * @author Swan
  */
 @Entity
-public class Category {
+public class Skill {
+
     /**.
      * id long
      */
     @GeneratedValue
     @Id
     private long id;
+
+    /**.
+     * Category
+     */
+    @ManyToOne
+    private Category category;
+
     /**.
      * name string
      */
@@ -33,6 +42,18 @@ public class Category {
      */
     public void setId(final long newId) {
         this.id = newId;
+    }
+    /**
+     * @return Category
+     */
+    public Category getCategory() {
+        return category;
+    }
+    /**
+     * @param  newCategory
+     */
+    public void setCategory(final Category newCategory) {
+        this.category = newCategory;
     }
     /**
      * @return String

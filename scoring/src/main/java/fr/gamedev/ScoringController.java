@@ -1,7 +1,7 @@
 package fr.gamedev;
 
-import fr.gamedev.data.ScoringRule;
-import fr.gamedev.data.UserAnswer;
+import fr.gamedev.domain.ScoringRule;
+import fr.gamedev.domain.UserAnswer;
 import fr.gamedev.dto.PendingUserAnswerDTO;
 import fr.gamedev.dto.ScoringRuleDto;
 import fr.gamedev.dto.UserAnswerDTO;

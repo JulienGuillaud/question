@@ -1,8 +1,8 @@
 package fr.gamedev.service;
 
 import com.google.gson.Gson;
-import fr.gamedev.data.Question;
-import fr.gamedev.data.Skill;
+import fr.gamedev.domain.Question;
+import fr.gamedev.domain.Skill;
 import fr.gamedev.dto.NextQuestionDTO;
 import fr.gamedev.dto.PendingUserAnswerDTO;
 import fr.gamedev.dto.QuestionDTO;

@@ -1,4 +1,4 @@
-package fr.gamedev.data;
+package fr.gamedev.domain;
 
 import org.springframework.hateoas.RepresentationModel;
 

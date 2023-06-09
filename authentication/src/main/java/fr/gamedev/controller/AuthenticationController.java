@@ -1,6 +1,6 @@
 package fr.gamedev.controller;
 
-import fr.gamedev.data.User;
+import fr.gamedev.domain.User;
 import fr.gamedev.dto.ConnectDTO;
 import fr.gamedev.dto.UpsertDTO;
 import fr.gamedev.service.AuthenticationService;

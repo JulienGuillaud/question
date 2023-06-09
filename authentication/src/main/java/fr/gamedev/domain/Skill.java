@@ -1,4 +1,4 @@
-package fr.gamedev.data;
+package fr.gamedev.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

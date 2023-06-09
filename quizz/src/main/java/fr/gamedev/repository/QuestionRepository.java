@@ -1,7 +1,7 @@
 package fr.gamedev.repository;
 
-import fr.gamedev.data.Question;
-import fr.gamedev.data.Skill;
+import fr.gamedev.domain.Question;
+import fr.gamedev.domain.Skill;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 

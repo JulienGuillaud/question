@@ -1,6 +1,6 @@
 package fr.gamedev.service;
 
-import fr.gamedev.data.User;
+import fr.gamedev.domain.User;
 import fr.gamedev.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
